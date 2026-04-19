@@ -67,6 +67,7 @@ All TypeScript examples connect to the public testnet at `https://rpc.tenzro.net
 | [Encrypted Messaging](security/encrypted-messaging.ts) | E2E encrypted chat with X25519 + AES-256-GCM |
 | [TEE Confidential Compute](security/tee-confidential-compute.ts) | TEE attestation, data sealing, and verification |
 | [ZK Proof Verification](security/zk-proof-verification.ts) | Groth16 proof generation and verification |
+| [VRF Random NFT Reveal](security/vrf-random-nft-reveal.ts) | RFC 9381 ECVRF-EDWARDS25519-SHA512-TAI: generate proofs, verify on-chain, mint NFTs with provably-fair randomness (precompile 0x1007, `mintRandom` selector `0x52517e21`) |
 
 ### Payments
 | Example | Description |
