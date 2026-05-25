@@ -6,30 +6,36 @@ import { TenzroClient, TESTNET_CONFIG } from "tenzro-sdk";
 async function main() {
   const client = new TenzroClient(TESTNET_CONFIG);
 
+  // Provision an identity + wallet so we have a creator address.
+  const me = await client.provider.participate("local-password");
+  const creator = me.wallet.address;
+
   // Step 1: Register yield routing agent
   const agent = await client.agent.register(
     "yield-router",
-    "Yield Router Agent",
+    creator,
     ["defi", "yield", "staking"]
   );
   console.log("Yield Router:", agent.agent_id);
 
-  // Step 2: Check staking yields on Tenzro
+  // Step 2: Inspect current staking state for this address
   const staking = client.staking;
-  const stakingInfo = await staking.getStakingInfo();
-  console.log("\nStaking info:", stakingInfo);
+  const stakingBalance = await staking.getStakingBalance(creator);
+  const rewards = await staking.getRewards(creator);
+  const unbonding = await staking.getUnbonding(creator);
+  console.log("\nStaking balance:", stakingBalance);
+  console.log("Pending rewards:", rewards);
+  console.log("Unbonding entries:", unbonding.length);
 
-  // Step 3: Stake TNZO as a validator
+  // Step 3: Stake TNZO as a validator (amount as decimal-string in base units)
   const stakeResult = await staking.stake(
-    100000000000000000000n, // 100 TNZO
+    "100000000000000000000", // 100 TNZO
     "validator"
   );
-  console.log("Staked:", stakeResult.tx_hash);
+  console.log("\nStaked:", stakeResult.tx_hash);
 
-  // Step 4: Monitor yield across protocols
-  const balance = await client.wallet.getBalance(
-    "0xMyWallet1234567890abcdef1234567890abcdef12"
-  );
+  // Step 4: Monitor wallet balance
+  const balance = await client.wallet.getBalance(creator);
   console.log("\nCurrent balance:", Number(balance) / 1e18, "TNZO");
 
   // Step 5: Use AI to recommend optimal allocation

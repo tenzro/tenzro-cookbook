@@ -7,8 +7,9 @@ async function main() {
   const client = new TenzroClient(TESTNET_CONFIG);
 
   // Step 1: Create an x402 payment challenge (server-side)
+  const resource = "/data/market-feed";
   const challenge = await client.payment.createChallenge(
-    "/api/data/market-feed", // resource
+    resource,                 // resource URL/path
     500,                      // amount
     "USDC",                   // asset (x402 typically uses USDC)
     "x402"                    // protocol: Coinbase x402
@@ -16,9 +17,8 @@ async function main() {
   console.log("x402 Challenge:");
   console.log("  ID:", challenge.challenge_id);
 
-  // Step 2: Pay the x402 challenge (client-side)
-  // x402 is stateless -- no sessions, just a single payment + receipt
-  const receipt = await client.payment.payX402(challenge.challenge_id);
+  // Step 2: Pay by passing the resource URL (x402 is stateless)
+  const receipt = await client.payment.payX402(resource);
   console.log("\nx402 Payment receipt:", receipt);
 
   // Step 3: Gateway info shows supported protocols

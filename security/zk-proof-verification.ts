@@ -1,5 +1,5 @@
 // Zero-Knowledge Proof Verification
-// Generate and verify Groth16 proofs for inference and settlement.
+// Generate and verify Plonky3 STARK proofs for inference, settlement, and identity.
 
 import { TenzroClient, TESTNET_CONFIG } from "tenzro-sdk";
 
@@ -29,7 +29,7 @@ async function main() {
   // Step 3: Verify the proof
   const result = await client.zk.verifyProof(
     inferenceProof.proof,
-    "groth16",
+    "plonky3",
     inferenceProof.public_inputs
   );
   console.log("\nVerification result:", result.valid);

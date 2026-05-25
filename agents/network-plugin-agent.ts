@@ -6,10 +6,14 @@ import { TenzroClient, TESTNET_CONFIG } from "tenzro-sdk";
 async function main() {
   const client = new TenzroClient(TESTNET_CONFIG);
 
+  // Provision an identity + wallet so we have a creator address.
+  const me = await client.provider.participate("local-password");
+  const creator = me.wallet.address;
+
   // Step 1: Register the agent
   const agent = await client.agent.register(
     "defi-plugin-agent",
-    "DeFi Plugin Agent",
+    creator,
     ["defi", "bridge", "swap"]
   );
   console.log("Agent registered:", agent.agent_id);

@@ -16,16 +16,17 @@ async function main() {
   // Step 2: Set up custody policies via the custody client
   const custody = client.custody;
 
-  // Create a spending policy
-  const policy = await custody.createSpendingPolicy(wallet.address, {
-    dailyLimit: 10000000000000000000n, // 10 TNZO/day
-    perTxLimit: 2000000000000000000n,  // 2 TNZO per tx
-  });
+  // Set spending limits on the wallet
+  const policy = await custody.setSpendingLimits(
+    wallet.wallet_id,
+    10000000000000000000n, // 10 TNZO/day
+    2000000000000000000n   // 2 TNZO per tx
+  );
   console.log("\nSpending policy set:", policy);
 
-  // Step 3: Create a session key (scoped, time-limited access)
-  const session = await custody.createSessionKey(
-    wallet.address,
+  // Step 3: Authorize a session key (scoped, time-limited access)
+  const session = await custody.authorizeSession(
+    wallet.wallet_id,
     3600, // 1 hour
     ["transfer", "inference"]
   );

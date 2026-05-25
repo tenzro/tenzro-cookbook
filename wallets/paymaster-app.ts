@@ -5,7 +5,7 @@ import { AppClient } from "tenzro-sdk";
 
 async function main() {
   // Step 1: Initialize AppClient with master wallet
-  const app = await AppClient.new(
+  const app = await AppClient.create(
     "https://rpc.tenzro.network",
     process.env.MASTER_PRIVATE_KEY!
   );

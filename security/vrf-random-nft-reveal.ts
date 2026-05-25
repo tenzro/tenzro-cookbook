@@ -153,7 +153,9 @@ async function main() {
     proofPadded.toString("hex");
 
   console.log("\nSubmitting mintRandom() transaction...");
-  const txHash = await rpc.call<string>("eth_sendTransaction", [
+  // tenzro_signAndSendTransaction: server-side sign + submit in one call.
+  // For pre-signed flows use eth_sendRawTransaction with {signature, public_key, timestamp}.
+  const txHash = await rpc.call<string>("tenzro_signAndSendTransaction", [
     {
       from: recipient,
       to: NFT_FACTORY_ADDRESS,

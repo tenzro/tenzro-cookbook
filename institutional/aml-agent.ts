@@ -6,10 +6,14 @@ import { TenzroClient, TESTNET_CONFIG } from "tenzro-sdk";
 async function main() {
   const client = new TenzroClient(TESTNET_CONFIG);
 
+  // Provision an identity + wallet so we have a creator address.
+  const me = await client.provider.participate("local-password");
+  const creator = me.wallet.address;
+
   // Step 1: Register AML agent
   const agent = await client.agent.register(
     "institutional-aml",
-    "Institutional AML Agent",
+    creator,
     ["compliance", "aml", "canton"]
   );
   console.log("AML Agent:", agent.agent_id);
@@ -25,20 +29,21 @@ async function main() {
   console.log("\nAML Analysis:", analysis.output);
 
   // Step 3: Check ERC-3643 compliance
-  const compliance = await client.compliance.checkCompliance(
+  const compliance = client.compliance();
+  const check = await compliance.checkCompliance(
     "TNZO",
     "0xBankA234567890abcdef1234567890abcdef1234",
     "0xBankB234567890abcdef1234567890abcdef1234",
     "50000000000000000000000" // 50,000 TNZO
   );
-  console.log("\nCompliant:", compliance.compliant);
+  console.log("\nCompliant:", check.compliant);
 
-  // Step 4: Generate ZK proof of compliance check
+  // Step 4: Generate ZK proof of compliance check (Plonky3 STARK over KoalaBear)
   const proof = await client.zk.createProof(
     "settlement",
     {
       amount: 50000,
-      compliant: compliance.compliant,
+      compliant: check.compliant,
       risk_score: 0.05,
     },
     ["0x01"]
@@ -54,7 +59,7 @@ async function main() {
     template_id: "AmlComplianceResult",
     payload: {
       transaction_id: "dvp-001",
-      compliant: compliance.compliant,
+      compliant: check.compliant,
       risk_score: 0.05,
       zk_proof: proof.proof,
       timestamp: new Date().toISOString(),

@@ -11,17 +11,19 @@ async function main() {
   console.log("Supported protocols:", info.protocols);
 
   // Step 2: Create a payment challenge for a resource
+  const resource = "/inference/gemma3-270m";
   const challenge = await client.payment.createChallenge(
-    "/api/inference/gemma3-270m",
+    resource,
     500,     // amount in smallest unit
     "USDC",  // asset
     "x402"   // protocol (x402 for Visa/Coinbase integration)
   );
   console.log("\nPayment challenge:", challenge.challenge_id);
 
-  // Step 3: In a real integration, the Visa tap would resolve to
-  // a Coinbase Commerce payment that settles via x402
-  const receipt = await client.payment.payX402(challenge.challenge_id);
+  // Step 3: In a real integration, the Visa tap-to-pay terminal would
+  // emit a credential consumed by tenzro_payVisaTap. For a quickstart we
+  // settle the same resource through the x402 path (Coinbase facilitator).
+  const receipt = await client.payment.payX402(resource);
   console.log("Payment settled:", receipt);
 
   // Step 4: Access the paid resource

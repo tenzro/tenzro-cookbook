@@ -25,6 +25,15 @@ All TypeScript examples connect to the public testnet at `https://rpc.tenzro.net
 | [TypeScript Quickstart](getting-started/typescript-quickstart.ts) | Connect, create wallet, send TNZO, run inference -- in TypeScript |
 | [Connect with Claude](getting-started/connect-with-claude.md) | Use Tenzro's MCP server with Claude Desktop |
 
+### Live Testnet
+Shell drivers that exercise the live testnet through raw JSON-RPC -- no SDK required, just `curl` + `jq`.
+
+| Example | Description |
+|---------|-------------|
+| [Agentic Workflow](live-testnet/agentic-workflow.sh) | 5 agents spawn identities, fund, register, and run a 20-iteration `post → quote → assign → complete` settlement cycle |
+| [Throughput](live-testnet/throughput.sh) | N parallel workers stress the marketplace cycle, with mempool admission and settlement-rate measurement |
+| [Multi-VM Settlement](live-testnet/multivm-settlement.sh) | Pointer-model invariant: one balance, four VM views (native / EVM / SVM / DAML), atomic cross-VM transfer, conservation check |
+
 ### Wallets
 | Example | Description |
 |---------|-------------|
@@ -105,7 +114,7 @@ rustc getting-started/rust-quickstart.rs -o quickstart && ./quickstart
 |---------|-----|
 | JSON-RPC | `https://rpc.tenzro.network` |
 | Web API | `https://api.tenzro.network` |
-| Faucet | `https://api.tenzro.network/api/faucet` |
+| Faucet | `https://api.tenzro.network/faucet` |
 | MCP Server | `https://mcp.tenzro.network/mcp` |
 
 Request testnet TNZO: 100 TNZO per request, 24h cooldown.

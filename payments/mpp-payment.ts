@@ -11,8 +11,9 @@ async function main() {
   console.log("Payment protocols:", info.protocols);
 
   // Step 2: Create a payment challenge (server-side)
+  const resource = "/inference/gemma3-270m";
   const challenge = await client.payment.createChallenge(
-    "/api/inference/gemma3-270m", // resource
+    resource,                     // resource URL/path
     1000,                         // amount (in smallest unit)
     "TNZO",                       // asset
     "mpp"                         // protocol: Machine Payments Protocol
@@ -21,8 +22,8 @@ async function main() {
   console.log("  ID:", challenge.challenge_id);
   console.log("  Resource:", challenge.resource);
 
-  // Step 3: Pay the challenge (client-side)
-  const receipt = await client.payment.payMpp(challenge.challenge_id);
+  // Step 3: Pay by passing the resource URL (not the challenge ID)
+  const receipt = await client.payment.payMpp(resource);
   console.log("\nPayment receipt:", receipt);
 
   // Step 4: List payment sessions

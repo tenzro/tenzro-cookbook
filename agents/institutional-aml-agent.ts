@@ -6,10 +6,14 @@ import { TenzroClient, TESTNET_CONFIG } from "tenzro-sdk";
 async function main() {
   const client = new TenzroClient(TESTNET_CONFIG);
 
+  // Provision an identity + wallet so we have a creator address.
+  const me = await client.provider.participate("local-password");
+  const creator = me.wallet.address;
+
   // Step 1: Register the AML agent
   const agent = await client.agent.register(
     "aml-compliance-oracle",
-    "AML Compliance Oracle",
+    creator,
     ["compliance", "kyc", "screening", "aml"]
   );
   console.log("AML Agent:", agent.agent_id);
@@ -26,11 +30,12 @@ async function main() {
   }
 
   // Step 4: Register ERC-3643 compliance rules
-  const rules = await client.compliance.registerCompliance("TNZO", true, 10000);
+  const compliance = client.compliance();
+  const rules = await compliance.registerCompliance("TNZO", true, 10000);
   console.log("\nCompliance rules:", rules);
 
   // Step 5: Check transfer compliance
-  const check = await client.compliance.checkCompliance(
+  const check = await compliance.checkCompliance(
     "TNZO",
     "0xSender1234567890abcdef1234567890abcdef1234",
     "0xRecipient234567890abcdef1234567890abcdef12",
@@ -46,7 +51,7 @@ async function main() {
   );
   console.log("\nAML Analysis:", analysis.output);
 
-  // Step 7: Generate ZK proof of compliance
+  // Step 7: Generate ZK proof of compliance (Plonky3 STARK over KoalaBear)
   const proof = await client.zk.createProof(
     "settlement",
     { amount: 50, compliant: true, risk_score: 0.1 },
@@ -59,7 +64,9 @@ async function main() {
   const template = await marketplace.registerAgentTemplate({
     name: "AML Compliance Oracle",
     description: "Real-time AML screening with TEE and ZK proofs",
-    template_type: "infrastructure",
+    template_type: "specialist",
+    system_prompt:
+      "You are an AML compliance oracle. Analyze transactions for risk indicators and return a structured assessment.",
     tags: ["compliance", "aml", "kyc"],
   });
   console.log("\nMarketplace template:", template.template_id);

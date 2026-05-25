@@ -24,15 +24,17 @@ async function main() {
   console.log("\nTokens:", response.tokens_used);
   console.log("Cost:", response.cost, "TNZO");
 
-  // Step 3: Use the streaming client for real-time output
+  // Step 3: Stream tokens in real time via the streaming client (async generator)
   const streaming = client.streaming;
   console.log("\nStreaming code review...");
-  const stream = await streaming.streamInference(
+  process.stdout.write("> ");
+  for await (const token of streaming.chatStream(
     "gemma3-270m",
-    "Review this Rust code for security issues and suggest improvements: fn main() { unsafe { } }",
-    512
-  );
-  console.log("Stream result:", stream);
+    "Review this Rust code for security issues and suggest improvements: fn main() { unsafe { } }"
+  )) {
+    process.stdout.write(token);
+  }
+  console.log();
 
   // Step 4: Chat with model for iterative refinement
   const chat = await client.provider.chat("gemma3-270m", [
