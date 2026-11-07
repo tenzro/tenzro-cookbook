@@ -11,6 +11,7 @@ Short recipes for building with [Tenzro](https://www.tenzro.com): the SDKs, MCP 
 | [MCP: client config](recipes/mcp-client-config.md) | JSON | Register the server in an MCP client |
 | [OpenAI-compatible clients](recipes/openai-compatible.md) | Python | `base_url` against a node; routes confirmed, no model served on the dev node |
 | [Passkey wallet](recipes/passkey-wallet.md) | link | Pointer to the live tutorial |
+| [Creating a did:tenzro identity](recipes/did-tenzro-create.md) | walkthrough | The real RPC flow, with source citations; not runnable here (needs a hardware key or a real/virtual WebAuthn ceremony) |
 
 More walkthroughs live in the [tutorials](https://www.tenzro.com/tutorials): governance voting, x402 payments, running a light node, a validator or a provider, and serving a model.
 
