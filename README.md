@@ -9,6 +9,7 @@ Short recipes for building with [Tenzro](https://www.tenzro.com): the SDKs, MCP 
 | [Python: chain id and balance](recipes/python-chain-id-and-balance.md) | Python | Install from source; PyPI release pending |
 | [MCP: check the server](recipes/mcp-check-the-server.md) | curl | `server/discover` against the MCP server |
 | [MCP: client config](recipes/mcp-client-config.md) | JSON | Register the server in an MCP client |
+| [OpenAI-compatible clients](recipes/openai-compatible.md) | Python | `base_url` against a node; routes confirmed, no model served on the dev node |
 | [Passkey wallet](recipes/passkey-wallet.md) | link | Pointer to the live tutorial |
 
 More walkthroughs live in the [tutorials](https://www.tenzro.com/tutorials): governance voting, x402 payments, running a light node, a validator or a provider, and serving a model.
