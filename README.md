@@ -1,6 +1,6 @@
 # tenzro-cookbook
 
-Short recipes for building with [Tenzro](https://www.tenzro.com): the SDKs, MCP and wallets. Each recipe says what was actually verified and links to its source.
+The official Tenzro cookbook: short, verified recipes for building with [Tenzro](https://www.tenzro.com) — the SDKs, MCP and wallets. Each recipe says exactly what was verified and links to its source.
 
 | Recipe | Language | What it does |
 | --- | --- | --- |
